@@ -3,43 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achintya Jaimini | Home</title>
+  <title>Achintya Jaimini | Portfolio</title>
 </head>
 
 <body>
 
-<header>
-  <h1>Achintya Jaimini</h1>
-  <nav>
-    <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="skills.html">Skills</a> |
-    <a href="projects.html">Projects</a> |
-    <a href="contact.html">Contact</a>
-  </nav>
-</header>
+  <!-- HEADER -->
+  <header>
+    <h1>Achintya Jaimini</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<hr>
+  <!-- HERO -->
+  <div class="hero">
+    <h2>Hello, I'm Achintya</h2>
+    <p>
+      Computer Science student at UC Davis. I love building software,
+      solving problems, and teaching Rubik’s Cube solving techniques.
+    </p>
+    <button class="btn">Explore My Work</button>
+  </div>
 
-<section>
-  <h2>Welcome</h2>
-  <p>
-    Computer Science student at UC Davis. I build software and enjoy solving problems.
-  </p>
-</section>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-title">About Me</div>
+    <p>
+      I am a developer experienced in <span class="highlight">C, C++, Python, Java, HTML, CSS</span>.
+      I enjoy building web apps, working on systems programming, and learning new technologies.
+    </p>
+  </section>
 
-<section>
-  <h3>Quick Links</h3>
-  <ul>
-    <li>About Me</li>
-    <li>My Skills</li>
-    <li>My Projects</li>
-  </ul>
-</section>
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-title">Skills</div>
 
-<footer>
-  <p>© 2026 Achintya Jaimini</p>
-</footer>
+    <div class="grid">
+      <div class="card">💻 Programming: C, C++, Python, Java</div>
+      <div class="card">🌐 Web: HTML, CSS, JavaScript</div>
+      <div class="card">⚙️ Systems: Assembly, OS basics</div>
+      <div class="card">🧠 Problem Solving & Algorithms</div>
+      <div class="card">🧊 Rubik’s Cube Teaching</div>
+      <div class="card">🤝 Leadership & Communication</div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-title">Projects</div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Cube Solvers Website</h3>
+        <p>Educational website for Rubik’s Cube tutorials.</p>
+      </div>
+
+      <div class="card">
+        <h3>Assembly Projects</h3>
+        <p>Low-level programs using x86-64 assembly.</p>
+      </div>
+
+      <div class="card">
+        <h3>Data Structures</h3>
+        <p>Implemented trees, graphs, and algorithms in C++.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-title">Contact</div>
+
+    <p>Email: <span class="highlight">yourname@email.com</span></p>
+    <p>GitHub: <span class="highlight">github.com/achintya-jaimini</span></p>
+    <p>Location: Bay Area, California</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 Achintya Jaimini | Built with HTML & CSS
+  </footer>
 
 </body>
 </html>
