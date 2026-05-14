@@ -38,7 +38,7 @@ body {
 .book-content {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.3s background 0.3s;
+  transition: color 0.9s;
 }
 
 .book-content:hover { color: var(--primary); }
@@ -46,7 +46,7 @@ body {
 .timeline-item {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.9s;
 }
 
 .timeline-item:hover { color: var(--primary); }
@@ -54,7 +54,7 @@ body {
 .project-glass-card {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.9s;
 } 
 
 .project-glass-card:hover { color: var(--primary); }
@@ -110,6 +110,7 @@ svg {
   fill: var(--text-dim);
   width: 40px;
   height: 40px;
+  transition: fill 0.9s;
 }
 
 svg:hover { fill: var(--primary); }
