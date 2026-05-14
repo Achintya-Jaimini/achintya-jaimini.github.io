@@ -1,0 +1,117 @@
+:root {
+  --bg1: #0f172a;
+  --bg2: #1e293b;
+  --accent: #38bdf8;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 28%),
+    linear-gradient(135deg, var(--bg1), var(--bg2));
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  width: min(1100px, 100%);
+}
+
+.hero {
+  max-width: 720px;
+  margin: auto;
+  padding: 3rem;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 2rem;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.6rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 18px 30px rgba(34, 211, 238, 0.22);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 40px rgba(34, 211, 238, 0.32);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 1.4rem;
+  padding: 1.5rem;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+code,
+pre {
+  background: rgba(148, 163, 184, 0.12);
+  color: #e2e8f0;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.6rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
