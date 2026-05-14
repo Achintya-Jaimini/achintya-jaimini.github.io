@@ -29,7 +29,7 @@ const App = () => {
       {/* HERO SECTION */}
       <header className="hero">
         <motion.div {...fadeIn}>
-          <span className="badge">CS @ UC Davis</span>
+          <span className="badge">Computer Science @ UC Davis</span>
           <h1>Achintya Jaimini</h1>
           <p className="hero-bio">
             Specializing in web development and scalable systems. 
