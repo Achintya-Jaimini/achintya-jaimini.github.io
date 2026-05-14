@@ -110,7 +110,7 @@ const App = () => {
             <div className="timeline-date">2025 - 2026</div>
             <div className="timeline-content">
               <h4>Front End Developer</h4>
-              <h5>Seguros Medical Products, Sacremento, CA</h5>
+              <h5>Seguros Medical Products, Sacremento, CA; Home Details Services LLC, Lincoln, CA</h5>
               <p>supporting web development, gaining experience in remote web design and Search Engine Optimization</p>
             </div>
           </div>
