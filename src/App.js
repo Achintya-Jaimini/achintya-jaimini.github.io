@@ -93,6 +93,9 @@ const App = () => {
       <br></br>
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
       {/* EXPERIENCE SECTION */}
       <section id="experience" className="section-padding bg-dark">
         <h2 className="section-title">Experience</h2>
