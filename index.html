@@ -1,37 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achintya Jaimini | Portfolio</title>
 
-  <title>Achintya Jaimini</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
 
-  <!-- <link rel="stylesheet" href="styles.css"> -->
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: #111827;
+      position: sticky;
+      top: 0;
+    }
+
+    header h1 {
+      font-size: 24px;
+      color: #38bdf8;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero h2 {
+      font-size: 50px;
+      margin-bottom: 10px;
+      color: #38bdf8;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #cbd5e1;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #38bdf8;
+      border: none;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    section {
+      padding: 60px 50px;
+    }
+
+    .section-title {
+      font-size: 30px;
+      color: #38bdf8;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1f2937;
+      padding: 20px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: #334155;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #111827;
+      margin-top: 50px;
+    }
+
+    .highlight {
+      color: #38bdf8;
+    }
+  </style>
 </head>
 
 <body>
 
+  <!-- HEADER -->
   <header>
     <h1>Achintya Jaimini</h1>
-
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Projects</a>
-      <a href="#">Contact</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <section class="hero">
-    <h2>Computer Science Student</h2>
-
+  <!-- HERO -->
+  <div class="hero">
+    <h2>Hello, I'm Achintya</h2>
     <p>
-      Developer, problem solver, and Rubik's Cube enthusiast.
+      Computer Science student at UC Davis. I love building software,
+      solving problems, and teaching Rubik’s Cube solving techniques.
     </p>
+    <button class="btn">Explore My Work</button>
+  </div>
 
-    <button>View Projects</button>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-title">About Me</div>
+    <p>
+      I am a developer experienced in <span class="highlight">C, C++, Python, Java, HTML, CSS</span>.
+      I enjoy building web apps, working on systems programming, and learning new technologies.
+    </p>
   </section>
 
-  <!-- <script src="script.js"></script> -->
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-title">Skills</div>
+
+    <div class="grid">
+      <div class="card">💻 Programming: C, C++, Python, Java</div>
+      <div class="card">🌐 Web: HTML, CSS, JavaScript</div>
+      <div class="card">⚙️ Systems: Assembly, OS basics</div>
+      <div class="card">🧠 Problem Solving & Algorithms</div>
+      <div class="card">🧊 Rubik’s Cube Teaching</div>
+      <div class="card">🤝 Leadership & Communication</div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-title">Projects</div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Cube Solvers Website</h3>
+        <p>Educational website for Rubik’s Cube tutorials.</p>
+      </div>
+
+      <div class="card">
+        <h3>Assembly Projects</h3>
+        <p>Low-level programs using x86-64 assembly.</p>
+      </div>
+
+      <div class="card">
+        <h3>Data Structures</h3>
+        <p>Implemented trees, graphs, and algorithms in C++.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-title">Contact</div>
+
+    <p>Email: <span class="highlight">yourname@email.com</span></p>
+    <p>GitHub: <span class="highlight">github.com/achintya-jaimini</span></p>
+    <p>Location: Bay Area, California</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 Achintya Jaimini | Built with HTML & CSS
+  </footer>
 
 </body>
 </html>
