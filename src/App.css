@@ -35,6 +35,32 @@ body {
 
 .nav-links a:hover { color: var(--primary); }
 
+.book-content {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.book-content:hover { color: var(--primary); }
+
+.timeline-item {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.timeline-item:hover { color: var(--primary); }
+
+.project-glass-card {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+} 
+
+.project-glass-card:hover { color: var(--primary); }
+
+
+
 .hero {
   text-align: center;
   padding: 100px 20px;
@@ -68,8 +94,8 @@ h1 { font-size: 3.5rem; margin: 1rem 0; }
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  padding: 0 10%;
+  gap: 1rem;
+  padding: 0;
 }
 
 .skill-card {
@@ -78,6 +104,19 @@ h1 { font-size: 3.5rem; margin: 1rem 0; }
   border-radius: 12px;
   border: 1px solid #1e293b;
   text-align: center;
+}
+
+svg {
+  fill: var(--primary);
+  width: 40px;
+  height: 40px;
+}
+
+#mail {
+  font-size: 24px;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
 .skill-icon { color: var(--primary); margin-bottom: 1rem; }
@@ -116,3 +155,9 @@ h1 { font-size: 3.5rem; margin: 1rem 0; }
 }
 
 .footer { text-align: center; padding: 3rem; color: var(--text-dim); border-top: 1px solid #1e293b; }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
