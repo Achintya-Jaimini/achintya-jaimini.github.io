@@ -38,7 +38,7 @@ body {
 .book-content {
   color: var(--text-dim);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.3s background 0.3s;
 }
 
 .book-content:hover { color: var(--primary); }
@@ -107,17 +107,12 @@ h1 { font-size: 3.5rem; margin: 1rem 0; }
 }
 
 svg {
-  fill: var(--primary);
+  fill: var(--text-dim);
   width: 40px;
   height: 40px;
 }
 
-#mail {
-  font-size: 24px;
-  color: var(--primary);
-  text-decoration: none;
-  transition: color 0.3s;
-}
+svg:hover { fill: var(--primary); }
 
 .skill-icon { color: var(--primary); margin-bottom: 1rem; }
 
