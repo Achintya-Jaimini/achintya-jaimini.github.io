@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './App.css';
+import Chatbot from "./components/Chatbot";
 
 const App = () => {
   const fadeIn = {
@@ -186,6 +187,11 @@ city of Davis</p>
             </div>
           </a>
         </div>
+      </section>
+
+      <section className="section-padding">
+        <h2 className="section-title">Ask About Me</h2>
+        <Chatbot />
       </section>
 
       <footer className="footer">
