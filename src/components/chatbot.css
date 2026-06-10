@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #25D366;
+  background: rgba(0, 38, 249, 0.917);
   color: white;
   font-size: 26px;
   width: 55px;
@@ -31,7 +31,7 @@
 }
 
 .chat-header {
-  background: #25D366;
+  background: rgba(0, 38, 249, 0.917);
   color: white;
   padding: 10px;
   font-weight: bold;
@@ -77,7 +77,7 @@
 }
 
 .chat-input button {
-  background: #25D366;
+  background: rgba(0, 38, 249, 0.917);
   color: white;
   border: none;
   padding: 10px 15px;
