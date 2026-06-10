@@ -189,11 +189,6 @@ city of Davis</p>
         </div>
       </section>
 
-      <section className="section-padding">
-        <h2 className="section-title">Ask About Me</h2>
-        <Chatbot />
-      </section>
-
       <footer className="footer">
         <p>© 2026 Achintya Jaimini</p>
       </footer>
