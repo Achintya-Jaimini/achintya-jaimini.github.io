@@ -23,7 +23,7 @@
   height: 420px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 38, 249, 0.917);
   display: flex;
   flex-direction: column;
   overflow: hidden;
