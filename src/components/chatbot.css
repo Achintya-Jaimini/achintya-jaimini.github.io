@@ -23,7 +23,7 @@
   height: 420px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 38, 249, 0.917);
+  box-shadow: 0 10px 30px var(--bg-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -31,7 +31,7 @@
 }
 
 .chat-header {
-  background: rgba(0, 38, 249, 0.917);
+  background: darkblue;
   color: white;
   padding: 10px;
   font-weight: bold;

@@ -189,6 +189,8 @@ city of Davis</p>
         </div>
       </section>
 
+      <Chatbot />
+
       <footer className="footer">
         <p>© 2026 Achintya Jaimini</p>
       </footer>
