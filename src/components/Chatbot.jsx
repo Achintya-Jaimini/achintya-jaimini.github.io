@@ -223,7 +223,7 @@ export default function Chatbot() {
         type="button"
         aria-label={open ? "Close chat" : "Open chat"}
       >
-        {open ? "x" : "AI"}
+        {open ? "x" : <span>&#128172;</span>}
       </button>
 
       {open && (
