@@ -1,93 +1,276 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./chatbot.css";
+
+const knowledgeBase = [
+  {
+    topic: "identity",
+    title: "Who Achintya is",
+    keywords: ["name", "who", "about", "intro", "introduction", "achintya", "jaimini"],
+    text: "Achintya Jaimini is a Computer Science student at UC Davis who focuses on web development, scalable systems, and practical software infrastructure."
+  },
+  {
+    topic: "education",
+    title: "Education",
+    keywords: ["education", "college", "university", "school", "study", "degree", "uc davis", "student"],
+    text: "He studies Computer Science at UC Davis, combining academic fundamentals with hands-on projects in software, machine learning, and systems."
+  },
+  {
+    topic: "skills",
+    title: "Technical skills",
+    keywords: ["skill", "tech", "technology", "stack", "language", "programming", "backend", "frontend", "framework"],
+    text: "His technical toolkit includes C, C++, Python, Java, JavaScript, React, Flask, Django, Assembly, Linux/Unix, Docker, Git, shell scripting, TensorFlow, and NumPy."
+  },
+  {
+    topic: "projects",
+    title: "Projects",
+    keywords: ["project", "built", "portfolio", "github", "voice", "assistant", "login", "davis friends", "eeg", "glare", "flare"],
+    text: "Featured projects include a Python voice-enabled assistant, a Flask login portal, Davis Friends for iOS, an image flare/glare removal project, and Neurotech EEG analysis with TensorFlow."
+  },
+  {
+    topic: "experience",
+    title: "Experience",
+    keywords: ["experience", "work", "job", "role", "intern", "director", "resident", "leadership", "seo"],
+    text: "His experience includes Infrastructure Director for Swift Coding Club at UC Davis, front-end web work for Seguros Medical Products and Home Details Services, Resident Assistant at UC Davis, AISC Beginners Sprint, and Neurotech @ Davis."
+  },
+  {
+    topic: "book",
+    title: "Book",
+    keywords: ["book", "author", "master", "stroke", "published", "writing", "recovery", "hemiparesis"],
+    text: "Achintya authored Master The Stroke, a personal account of recovery from a brain stroke and hemiparesis that highlights persistence and resilience."
+  },
+  {
+    topic: "interests",
+    title: "Interests",
+    keywords: ["hobby", "interest", "rubik", "chess", "exercise", "teach", "travel", "fun"],
+    text: "Outside the core CS work, he enjoys chess, solving Rubik's Cubes, exercising, teaching mathematics, and exploring new places and ideas."
+  },
+  {
+    topic: "chess",
+    title: "Chess bot",
+    keywords: ["chess", "bot", "game", "play", "timed"],
+    text: "This site also includes a timed React chess bot with multiple difficulty settings, legal move highlighting, move history, and a simple chess engine."
+  },
+  {
+    topic: "contact",
+    title: "Contact",
+    keywords: ["contact", "linkedin", "connect", "reach", "profile"],
+    text: "The best visible contact path on the site is Achintya's LinkedIn profile, linked from the hero section."
+  }
+];
+
+const stopWords = new Set([
+  "a", "an", "and", "are", "as", "at", "be", "can", "do", "for", "from", "he",
+  "his", "how", "i", "in", "is", "it", "me", "of", "on", "or", "tell", "that",
+  "the", "this", "to", "was", "what", "with", "you", "your"
+]);
+
+const sentenceOpeners = [
+  "Absolutely.",
+  "Here's the short version.",
+  "Good question.",
+  "A strong angle is this:"
+];
+
+function tokenize(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 1 && !stopWords.has(word));
+}
+
+function scoreEntry(entry, tokens, rawQuestion) {
+  const searchableText = `${entry.title} ${entry.text} ${entry.keywords.join(" ")}`.toLowerCase();
+  const keywordScore = entry.keywords.reduce((score, keyword) => {
+    return rawQuestion.includes(keyword) ? score + 4 : score;
+  }, 0);
+  const tokenScore = tokens.reduce((score, token) => {
+    return searchableText.includes(token) ? score + 1 : score;
+  }, 0);
+
+  return keywordScore + tokenScore;
+}
+
+function inferIntent(question) {
+  if (/\b(compare|best|strongest|highlight|impressive)\b/i.test(question)) return "recommend";
+  if (/\b(list|all|everything|summarize|overview)\b/i.test(question)) return "summary";
+  if (/\b(why|how|explain)\b/i.test(question)) return "explain";
+  return "answer";
+}
+
+function buildResponse(question, history) {
+  const rawQuestion = question.toLowerCase();
+  const tokens = tokenize(question);
+  const intent = inferIntent(question);
+  const ranked = knowledgeBase
+    .map((entry) => ({ ...entry, score: scoreEntry(entry, tokens, rawQuestion) }))
+    .sort((a, b) => b.score - a.score);
+  const matches = ranked.filter((entry) => entry.score > 0).slice(0, intent === "summary" ? 4 : 2);
+
+  if (/\b(hi|hello|hey)\b/i.test(question)) {
+    return {
+      text: "Hi, I'm Achintya's portfolio assistant. Ask me about his projects, skills, experience, book, chess bot, or background.",
+      topic: "identity"
+    };
+  }
+
+  if (!matches.length) {
+    const lastBotTopic = [...history].reverse().find((message) => message.topic)?.topic;
+    const followUp = knowledgeBase.find((entry) => entry.topic === lastBotTopic);
+
+    if (followUp && tokens.length < 4) {
+      return {
+        text: `${followUp.text} You can also ask me to connect that to his projects, skills, or experience.`,
+        topic: followUp.topic
+      };
+    }
+
+    return {
+      text: "I can answer best when the question is about Achintya's skills, projects, experience, education, book, chess bot, or interests. Try asking, \"What projects has he built?\" or \"What is his strongest technical stack?\"",
+      topic: "identity"
+    };
+  }
+
+  if (intent === "recommend") {
+    const project = knowledgeBase.find((entry) => entry.topic === "projects");
+    const skills = knowledgeBase.find((entry) => entry.topic === "skills");
+    return {
+      text: `The strongest portfolio signal is the mix of practical software and leadership. ${project.text} ${skills.text}`,
+      topic: "projects"
+    };
+  }
+
+  const opener = sentenceOpeners[(question.length + matches.length) % sentenceOpeners.length];
+  const answer = matches.map((entry) => entry.text).join(" ");
+
+  if (intent === "explain") {
+    return {
+      text: `${opener} ${answer} That combination shows both technical range and a bias toward building things people can actually use.`,
+      topic: matches[0].topic
+    };
+  }
+
+  if (intent === "summary") {
+    return {
+      text: `${opener} ${answer}`,
+      topic: matches[0].topic
+    };
+  }
+
+  return {
+    text: `${opener} ${answer}`,
+    topic: matches[0].topic
+  };
+}
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi! Ask me anything about Achintya 👋" }
+    {
+      from: "bot",
+      text: "Hi, I'm a tiny portfolio LLM. Ask me anything about Achintya.",
+      topic: "identity"
+    }
   ]);
   const [input, setInput] = useState("");
+  const [thinking, setThinking] = useState(false);
+  const bodyRef = useRef(null);
 
-  const getReply = (msg) => {
-  const q = msg.toLowerCase();
+  const suggestions = useMemo(() => [
+    "What projects has he built?",
+    "Summarize his skills",
+    "What is his experience?"
+  ], []);
 
-  if (q.includes("name")) {
-    return "It is my pleasure to introduce Achintya Jaimini, a passionate Computer Science student at UC Davis whose journey is defined by curiosity, resilience, and a commitment to lifelong learning.";
-  }
+  useEffect(() => {
+    if (!bodyRef.current) return;
+    bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  }, [messages, thinking, open]);
 
-  if (q.includes("skill")) {
-    return "Achintya's technical repertoire is a rich tapestry woven from C, C++, Python, Java, React, Flask, Django, Assembly, and numerous other technologies cultivated through dedication and exploration.";
-  }
+  const sendMessage = (overrideText) => {
+    const text = (overrideText || input).trim();
+    if (!text || thinking) return;
 
-  if (q.includes("project")) {
-    return "Among the many endeavors that have captured Achintya's imagination are a voice-enabled assistant, a secure login portal, EEG data analysis initiatives, and the Davis Friends application, each reflecting a desire to create meaningful and impactful solutions.";
-  }
-
-  if (q.includes("experience")) {
-    return "His professional journey has been marked by leadership, service, and innovation, including roles as Infrastructure Director, Front-End Developer, and Resident Assistant, where he has consistently sought to empower those around him.";
-  }
-
-  if (q.includes("book")) {
-    return "Achintya is the author of 'Master The Stroke,' a deeply personal narrative chronicling perseverance, determination, and the remarkable ability of the human spirit to overcome adversity.";
-  }
-
-  if (
-    q.includes("education") ||
-    q.includes("college") ||
-    q.includes("university") ||
-    q.includes("study")
-  ) {
-    return "Achintya currently pursues a degree in Computer Science at UC Davis, where rigorous academic study and hands-on experience come together to shape the foundation of his future aspirations.";
-  }
-
-  if (q.includes("hobby") || q.includes("interest")) {
-    return "Beyond academics and technology, Achintya enjoys solving Rubik's Cubes, playing chess, exercising, teaching mathematics, and embracing opportunities to explore new places and ideas.";
-  }
-
-  return "I would be delighted to share more about Achintya's education, technical expertise, projects, leadership experiences, hobbies, or literary accomplishments. Simply ask, and I shall gladly illuminate another chapter of his story.";
-};
-
-  const sendMessage = () => {
-    if (!input.trim()) return;
-
-    const userMsg = { from: "user", text: input };
-    const botMsg = { from: "bot", text: getReply(input) };
-
-    setMessages([...messages, userMsg, botMsg]);
+    const userMsg = { from: "user", text };
+    setMessages((currentMessages) => [...currentMessages, userMsg]);
     setInput("");
+    setThinking(true);
+
+    window.setTimeout(() => {
+      const response = buildResponse(text, messages);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          from: "bot",
+          text: response.text,
+          topic: response.topic
+        }
+      ]);
+      setThinking(false);
+    }, 420);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    sendMessage();
   };
 
   return (
     <>
-      {/* Floating Button */}
-      <div className="chat-button" onClick={() => setOpen(!open)}>
-        💬
-      </div>
+      <button
+        className="chat-button"
+        onClick={() => setOpen(!open)}
+        type="button"
+        aria-label={open ? "Close chat" : "Open chat"}
+      >
+        {open ? "x" : "AI"}
+      </button>
 
-      {/* Chat Window */}
       {open && (
-        <div className="chat-window">
+        <section className="chat-window" aria-label="Portfolio chatbot">
           <div className="chat-header">
-            Ask About Me
+            <div>
+              <span>Portfolio LLM</span>
+              <strong>Ask About Achintya</strong>
+            </div>
+            <small>On-device</small>
           </div>
 
-          <div className="chat-body">
-            {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.from}`}>
-                {m.text}
+          <div className="chat-body" ref={bodyRef}>
+            {messages.map((message, index) => (
+              <div key={`${message.from}-${index}`} className={`msg ${message.from}`}>
+                {message.text}
               </div>
+            ))}
+            {thinking && (
+              <div className="msg bot thinking">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            )}
+          </div>
+
+          <div className="chat-suggestions" aria-label="Suggested questions">
+            {suggestions.map((suggestion) => (
+              <button key={suggestion} onClick={() => sendMessage(suggestion)} type="button">
+                {suggestion}
+              </button>
             ))}
           </div>
 
-          <div className="chat-input">
+          <form className="chat-input" onSubmit={handleSubmit}>
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ask about projects, skills, experience..."
+              aria-label="Message"
             />
-            <button onClick={sendMessage}>Send</button>
-          </div>
-        </div>
+            <button type="submit" disabled={thinking}>
+              Send
+            </button>
+          </form>
+        </section>
       )}
     </>
   );

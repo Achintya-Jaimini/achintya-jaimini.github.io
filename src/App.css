@@ -26,14 +26,24 @@ body {
   z-index: 100;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-button {
   color: var(--text-dim);
   text-decoration: none;
   margin-left: 2rem;
   transition: color 0.3s;
 }
 
-.nav-links a:hover { color: var(--primary); }
+.nav-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-links a:hover,
+.nav-button:hover { color: var(--primary); }
 
 .book-content {
   color: var(--text-dim);
@@ -80,6 +90,26 @@ h1 { font-size: 3.5rem; margin: 1rem 0; }
 .subtitle { font-size: 1.5rem; color: var(--secondary); margin-bottom: 1rem; }
 .hero-bio { max-width: 600px; margin: 0 auto; color: var(--text-dim); line-height: 1.6; }
 
+.play-chess-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 1rem;
+  padding: 0 1.2rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #022c22;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.22);
+}
+
+.play-chess-button:hover {
+  filter: brightness(1.08);
+}
+
 .highlight-container { padding: 2rem 10%; }
 .book-card {
   background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
@@ -120,6 +150,282 @@ svg:hover { fill: var(--primary); }
 .section-padding { padding: 80px 10%; }
 .section-title { font-size: 2rem; margin-bottom: 3rem; text-align: center; }
 
+.chess-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(2, 6, 23, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.chess-modal {
+  position: relative;
+  width: min(1120px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 32rem),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(2, 6, 23, 0.95));
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.55);
+}
+
+.chess-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.88);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.chess-close svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+}
+
+.clock-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: fit-content;
+  min-width: 172px;
+  min-height: 48px;
+  margin: -1.25rem auto 1.5rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  background: rgba(2, 6, 23, 0.68);
+}
+
+.clock-card span {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.clock-card strong {
+  font-size: 1.45rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-card.low-time strong {
+  color: #f87171;
+}
+
+.chess-header {
+  text-align: center;
+}
+
+.chess-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 560px) minmax(260px, 360px);
+  gap: 2rem;
+  align-items: start;
+  justify-content: center;
+}
+
+.chess-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: min(100%, 560px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(226, 232, 240, 0.28);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+}
+
+.chess-square {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  color: #0f172a;
+  cursor: pointer;
+  transition: box-shadow 0.16s ease, transform 0.16s ease, filter 0.16s ease;
+}
+
+.chess-square.light {
+  background: #d8e3d1;
+}
+
+.chess-square.dark {
+  background: #4f7f66;
+}
+
+.chess-square:hover {
+  filter: brightness(1.08);
+}
+
+.chess-square.selected {
+  box-shadow: inset 0 0 0 4px #facc15;
+}
+
+.chess-square.target::after {
+  content: '';
+  width: 28%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.34);
+  position: absolute;
+}
+
+.chess-square.target span {
+  transform: scale(1.05);
+}
+
+.chess-square span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  font-size: clamp(1.55rem, 6vw, 3.8rem);
+  line-height: 1;
+  text-shadow: 0 2px 5px rgba(15, 23, 42, 0.35);
+}
+
+.chess-square.white-piece span {
+  color: #f8fafc;
+}
+
+.chess-square.black-piece span {
+  color: #111827;
+}
+
+.chess-square small {
+  position: absolute;
+  left: 0.35rem;
+  bottom: 0.25rem;
+  font-size: clamp(0.5rem, 1.25vw, 0.7rem);
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.48);
+}
+
+.chess-panel {
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.bot-status {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.panel-icon,
+.move-list-title svg,
+.reset-button svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+}
+
+.panel-icon {
+  color: var(--primary);
+  margin-top: 0.25rem;
+}
+
+.bot-status h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.15rem;
+}
+
+.bot-status p,
+.move-list p {
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.difficulty-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin: 1.35rem 0;
+  padding: 0.25rem;
+  background: rgba(2, 6, 23, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+}
+
+.difficulty-tabs button,
+.reset-button {
+  border: 0;
+  border-radius: 6px;
+  min-height: 42px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.difficulty-tabs button {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.difficulty-tabs button.active {
+  background: var(--primary);
+  color: #022c22;
+}
+
+.reset-button {
+  width: 100%;
+  display: inline-flex;
+  gap: 0.55rem;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #f8fafc;
+}
+
+.move-list {
+  margin-top: 1.35rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  padding-top: 1.15rem;
+}
+
+.move-list-title {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.move-list-title h4 {
+  margin: 0;
+}
+
+.move-list ol {
+  max-height: 210px;
+  overflow: auto;
+  margin: 0;
+  padding-left: 1.35rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
 .timeline { border-left: 2px solid var(--secondary); padding-left: 2rem; max-width: 800px; margin: 0 auto; }
 .timeline-item { position: relative; margin-bottom: 3rem; }
 .timeline-item::before {
@@ -156,4 +462,60 @@ a {
   color: var(--primary);
   text-decoration: none;
   transition: color 0.3s;
+}
+
+@media (max-width: 860px) {
+  .navbar {
+    gap: 1rem;
+    padding: 1rem 5%;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .nav-links a {
+    margin-left: 0;
+  }
+
+  .nav-button {
+    margin-left: 0;
+  }
+
+  .chess-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chess-board {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  h1 {
+    font-size: 2.45rem;
+  }
+
+  .section-padding {
+    padding: 56px 5%;
+  }
+
+  .chess-panel {
+    padding: 1rem;
+  }
+
+  .chess-modal {
+    padding: 1.25rem;
+  }
+
+  .clock-card {
+    margin-top: -0.75rem;
+  }
+
+  .bot-status {
+    grid-template-columns: 1fr;
+  }
 }
