@@ -528,7 +528,6 @@ const App = () => {
         <div className="nav-logo">AJ</div>
         <div className="nav-links">
           <a href="#skills">Skills</a>
-          <button className="nav-button" onClick={() => setChessOpen(true)} type="button">Chess Bot</button>
           <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
         </div>
