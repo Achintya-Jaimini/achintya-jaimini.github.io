@@ -419,8 +419,6 @@ function ChessBot({ onClose }) {
         </button>
 
         <div className="chess-header">
-          <span className="badge">React Chess Bot</span>
-          <h2 id="chess-title" className="section-title">Play the Bot</h2>
         </div>
 
         <div className={`clock-card ${playerTime <= 30 ? 'low-time' : ''}`}>
