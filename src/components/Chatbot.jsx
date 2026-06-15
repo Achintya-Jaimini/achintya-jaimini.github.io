@@ -168,7 +168,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       from: "bot",
-      text: "Hi, I'm a tiny portfolio LLM. Ask me anything about Achintya.",
+      text: "Hi, ask me anything about Achintya.",
       topic: "identity"
     }
   ]);
@@ -230,10 +230,8 @@ export default function Chatbot() {
         <section className="chat-window" aria-label="Portfolio chatbot">
           <div className="chat-header">
             <div>
-              <span>Portfolio LLM</span>
               <strong>Ask About Achintya</strong>
             </div>
-            <small>On-device</small>
           </div>
 
           <div className="chat-body" ref={bodyRef}>
