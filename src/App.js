@@ -627,6 +627,7 @@ const App = () => {
       <header className="hero">
         <motion.div {...fadeIn}>
           <h1>I'm Achintya Jaimini</h1>
+          <br></br>
           <span className="badge">Computer Science @ UC Davis</span>
           
           <p className="hero-bio">
