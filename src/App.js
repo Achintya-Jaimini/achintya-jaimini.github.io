@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { 
-  Terminal, Cpu, Globe, Server, RotateCcw, Swords, Bot, X
+  Terminal, Cpu, Globe, Server, RotateCcw, Swords, Bot, X, Send, Download
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './App.css';
@@ -100,6 +100,12 @@ const botLevels = {
   deep: { depth: 3, quiescenceDepth: 3, randomness: 0.02 }
 };
 const playerStartSeconds = 300;
+const initialContactForm = {
+  name: '',
+  email: '',
+  subject: '',
+  message: ''
+};
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
   493.88, 392, 440, 523.25
@@ -584,6 +590,8 @@ function ChessBot({ onClose }) {
 
 const App = () => {
   const [chessOpen, setChessOpen] = useState(false);
+  const [contactForm, setContactForm] = useState(initialContactForm);
+  const [contactStatus, setContactStatus] = useState('');
   const audioStateRef = useRef(null);
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -611,6 +619,49 @@ const App = () => {
     };
   }, []);
 
+  const getStoredSubmissions = () => {
+    try {
+      return JSON.parse(window.localStorage.getItem('contactSubmissions') || '[]');
+    } catch {
+      return [];
+    }
+  };
+
+  const handleContactChange = (event) => {
+    const { name, value } = event.target;
+    setContactForm((currentForm) => ({
+      ...currentForm,
+      [name]: value
+    }));
+  };
+
+  const handleContactSubmit = (event) => {
+    event.preventDefault();
+
+    const submission = {
+      ...contactForm,
+      submittedAt: new Date().toISOString()
+    };
+    const submissions = [...getStoredSubmissions(), submission];
+    window.localStorage.setItem('contactSubmissions', JSON.stringify(submissions, null, 2));
+
+    setContactStatus('Saved. Download the JSON file below and commit it as contact-submissions.json.');
+    setContactForm(initialContactForm);
+  };
+
+  const downloadContactSubmissions = () => {
+    const submissions = getStoredSubmissions();
+    const fileContents = JSON.stringify({ submissions }, null, 2);
+    const blob = new Blob([fileContents], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'contact-submissions.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="portfolio">
       {/* NAVIGATION */}
@@ -620,6 +671,7 @@ const App = () => {
           <a href="#skills">Skills</a>
           <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
         </div>
       </nav>
 
@@ -789,6 +841,77 @@ city of Davis</p>
             </div>
           </a>
         </div>
+      </section>
+
+      {/* CONTACT SECTION */}
+      <section id="contact" className="section-padding contact-section">
+        <motion.div className="contact-shell" {...fadeIn}>
+          <div className="contact-copy">
+            <h2 className="section-title">Contact</h2>
+            <p>
+              Have a project, opportunity, or question? Send a note and I will follow up.
+            </p>
+          </div>
+
+          <form className="contact-form" onSubmit={handleContactSubmit}>
+            <label>
+              <span>Name</span>
+              <input
+                name="name"
+                type="text"
+                value={contactForm.name}
+                onChange={handleContactChange}
+                required
+              />
+            </label>
+
+            <label>
+              <span>Email</span>
+              <input
+                name="email"
+                type="email"
+                value={contactForm.email}
+                onChange={handleContactChange}
+                required
+              />
+            </label>
+
+            <label>
+              <span>Subject</span>
+              <input
+                name="subject"
+                type="text"
+                value={contactForm.subject}
+                onChange={handleContactChange}
+                required
+              />
+            </label>
+
+            <label className="message-field">
+              <span>Message</span>
+              <textarea
+                name="message"
+                value={contactForm.message}
+                onChange={handleContactChange}
+                rows="5"
+                required
+              />
+            </label>
+
+            {contactStatus && <p className="contact-status">{contactStatus}</p>}
+
+            <div className="contact-actions">
+              <button className="contact-submit" type="submit">
+                <Send />
+                Submit
+              </button>
+              <button className="contact-download" type="button" onClick={downloadContactSubmissions}>
+                <Download />
+                Download file
+              </button>
+            </div>
+          </form>
+        </motion.div>
       </section>
 
       <Chatbot />

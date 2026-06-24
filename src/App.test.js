@@ -9,8 +9,8 @@ jest.mock('framer-motion', () => ({
   }
 }));
 
-test('renders chess bot section', () => {
+test('renders contact form', () => {
   render(<App />);
-  const linkElement = screen.getByText(/play timed chess/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /contact/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
 });
