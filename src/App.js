@@ -619,14 +619,6 @@ const App = () => {
     };
   }, []);
 
-  const getStoredSubmissions = () => {
-    try {
-      return JSON.parse(window.localStorage.getItem('contactSubmissions') || '[]');
-    } catch {
-      return [];
-    }
-  };
-
   const handleContactChange = (event) => {
     const { name, value } = event.target;
     setContactForm((currentForm) => ({
@@ -635,18 +627,29 @@ const App = () => {
     }));
   };
 
-  const handleContactSubmit = (event) => {
+  const handleContactSubmit = async (event) => {
     event.preventDefault();
+    setContactStatus('Sending...');
 
-    const submission = {
-      ...contactForm,
-      submittedAt: new Date().toISOString()
-    };
-    const submissions = [...getStoredSubmissions(), submission];
-    window.localStorage.setItem('contactSubmissions', JSON.stringify(submissions, null, 2));
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(contactForm)
+      });
 
-    setContactStatus('Thanks. Your message has been received.');
-    setContactForm(initialContactForm);
+      if (!response.ok) {
+        throw new Error('Contact form submission failed.');
+      }
+
+      setContactStatus('Thanks. Your message has been received.');
+      setContactForm(initialContactForm);
+    } catch {
+      setContactStatus('Sorry, your message could not be sent. Please try again later.');
+    }
   };
 
   return (
