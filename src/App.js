@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { 
-  Terminal, Cpu, Globe, Server, RotateCcw, Swords, Bot, X, Send, Download
+  Terminal, Cpu, Globe, Server, RotateCcw, Swords, Bot, X, Send
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './App.css';
@@ -645,21 +645,8 @@ const App = () => {
     const submissions = [...getStoredSubmissions(), submission];
     window.localStorage.setItem('contactSubmissions', JSON.stringify(submissions, null, 2));
 
-    setContactStatus('Saved. Download the JSON file below and commit it as contact-submissions.json.');
+    setContactStatus('Thanks. Your message has been received.');
     setContactForm(initialContactForm);
-  };
-
-  const downloadContactSubmissions = () => {
-    const submissions = getStoredSubmissions();
-    const fileContents = JSON.stringify({ submissions }, null, 2);
-    const blob = new Blob([fileContents], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = 'contact-submissions.json';
-    link.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -904,10 +891,6 @@ city of Davis</p>
               <button className="contact-submit" type="submit">
                 <Send />
                 Submit
-              </button>
-              <button className="contact-download" type="button" onClick={downloadContactSubmissions}>
-                <Download />
-                Download file
               </button>
             </div>
           </form>

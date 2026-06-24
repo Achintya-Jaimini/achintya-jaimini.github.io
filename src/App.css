@@ -539,8 +539,7 @@ svg:hover { fill: var(--primary); }
   gap: 0.75rem;
 }
 
-.contact-submit,
-.contact-download {
+.contact-submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -558,14 +557,7 @@ svg:hover { fill: var(--primary); }
   color: #022c22;
 }
 
-.contact-download {
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  background: rgba(2, 6, 23, 0.72);
-  color: var(--text-main);
-}
-
-.contact-submit svg,
-.contact-download svg {
+.contact-submit svg {
   width: 18px;
   height: 18px;
   fill: none;
