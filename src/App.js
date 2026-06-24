@@ -100,6 +100,76 @@ const botLevels = {
   deep: { depth: 3, quiescenceDepth: 3, randomness: 0.02 }
 };
 const playerStartSeconds = 300;
+const melodyPattern = [
+  329.63, 392, 493.88, 587.33,
+  493.88, 392, 440, 523.25
+];
+
+function startAmbientMusic(audioStateRef) {
+  if (audioStateRef.current) {
+    audioStateRef.current.context.resume().catch(() => {});
+    return;
+  }
+
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+
+  const context = new AudioContext();
+  const masterGain = context.createGain();
+  masterGain.gain.setValueAtTime(0.045, context.currentTime);
+  masterGain.connect(context.destination);
+
+  const delay = context.createDelay();
+  const delayGain = context.createGain();
+  delay.delayTime.setValueAtTime(0.18, context.currentTime);
+  delayGain.gain.setValueAtTime(0.18, context.currentTime);
+  delay.connect(delayGain);
+  delayGain.connect(masterGain);
+
+  let noteIndex = 0;
+  const playNote = () => {
+    const now = context.currentTime;
+    const frequency = melodyPattern[noteIndex % melodyPattern.length];
+    const oscillator = context.createOscillator();
+    const voiceGain = context.createGain();
+
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(frequency, now);
+    oscillator.frequency.exponentialRampToValueAtTime(frequency * 1.006, now + 0.16);
+    voiceGain.gain.setValueAtTime(0.0001, now);
+    voiceGain.gain.exponentialRampToValueAtTime(0.28, now + 0.015);
+    voiceGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+    oscillator.connect(voiceGain);
+    voiceGain.connect(masterGain);
+    voiceGain.connect(delay);
+    oscillator.start(now);
+    oscillator.stop(now + 0.34);
+    noteIndex += 1;
+  };
+
+  playNote();
+  const intervalId = window.setInterval(playNote, 360);
+
+  const lfo = context.createOscillator();
+  const lfoGain = context.createGain();
+  lfo.frequency.setValueAtTime(0.16, context.currentTime);
+  lfoGain.gain.setValueAtTime(0.006, context.currentTime);
+  lfo.connect(lfoGain);
+  lfoGain.connect(masterGain.gain);
+  lfo.start();
+
+  audioStateRef.current = {
+    context,
+    stop: () => {
+      window.clearInterval(intervalId);
+      lfo.stop();
+      context.close();
+    }
+  };
+
+  context.resume().catch(() => {});
+}
 
 function mirroredIndex(index) {
   const row = Math.floor(index / 8);
@@ -514,12 +584,32 @@ function ChessBot({ onClose }) {
 
 const App = () => {
   const [chessOpen, setChessOpen] = useState(false);
+  const audioStateRef = useRef(null);
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
     transition: { duration: 0.6 }
   };
+
+  useEffect(() => {
+    const beginMusic = () => startAmbientMusic(audioStateRef);
+
+    beginMusic();
+
+    const interactionEvents = ['click', 'keydown', 'touchstart', 'scroll'];
+    interactionEvents.forEach((eventName) => {
+      window.addEventListener(eventName, beginMusic, { once: true, passive: true });
+    });
+
+    return () => {
+      interactionEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, beginMusic);
+      });
+      audioStateRef.current?.stop();
+      audioStateRef.current = null;
+    };
+  }, []);
 
   return (
     <div className="portfolio">
@@ -536,8 +626,9 @@ const App = () => {
       {/* HERO SECTION */}
       <header className="hero">
         <motion.div {...fadeIn}>
+          <h1>I'm Achintya Jaimini</h1>
           <span className="badge">Computer Science @ UC Davis</span>
-          <h1>Achintya Jaimini</h1>
+          
           <p className="hero-bio">
             Specializing in web development and scalable systems. 
             Passionate about building efficient and reliable software infrastructure.
