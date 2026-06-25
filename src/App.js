@@ -106,6 +106,7 @@ const initialContactForm = {
   subject: '',
   message: ''
 };
+const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || 'https://formsubmit.co/ajax/achintyajaimini@gmail.com';
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
   493.88, 392, 440, 523.25
@@ -629,16 +630,30 @@ const App = () => {
 
   const handleContactSubmit = async (event) => {
     event.preventDefault();
+
+    if (!contactEndpoint) {
+      setContactStatus('Contact form is not configured yet.');
+      return;
+    }
+
     setContactStatus('Sending...');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(contactEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json'
         },
-        body: JSON.stringify(contactForm)
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          _replyto: contactForm.email,
+          subject: contactForm.subject,
+          message: contactForm.message,
+          _subject: `Portfolio contact: ${contactForm.subject}`,
+          _template: 'table'
+        })
       });
 
       if (!response.ok) {
