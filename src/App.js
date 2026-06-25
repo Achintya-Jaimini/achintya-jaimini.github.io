@@ -687,6 +687,7 @@ const App = () => {
           
           <span className="badge">Computer Science @ UC Davis</span>
           <br></br>
+          <br></br>
           <p className="hero-bio">
             Specializing in web development and scalable systems. 
             Passionate about building efficient and reliable software infrastructure.
