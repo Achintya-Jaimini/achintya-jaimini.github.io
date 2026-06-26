@@ -106,6 +106,7 @@ const initialContactForm = {
   subject: '',
   message: ''
 };
+const contactEmail = 'achintyajaimini@gmail.com';
 const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || '/api/contact';
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
@@ -645,7 +646,7 @@ const App = () => {
     const formStartedAt = formData.get('formStartedAt')?.toString() || '';
 
     if (!contactEndpoint) {
-      setContactStatus('Contact form is not configured yet.');
+      openMailFallback();
       return;
     }
 
@@ -685,8 +686,26 @@ const App = () => {
       setContactForm(initialContactForm);
       setContactFormStartedAt(Date.now());
     } catch (error) {
-      setContactStatus(error?.message || 'Sorry, your message could not be sent. Please try again later.');
+      openMailFallback(error);
     }
+  };
+
+  const openMailFallback = (error) => {
+    const subject = contactForm.subject || 'Portfolio contact';
+    const body = [
+      `Name: ${contactForm.name}`,
+      `Email: ${contactForm.email}`,
+      '',
+      contactForm.message
+    ].join('\n');
+    const mailtoUrl = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoUrl;
+    setContactStatus(
+      error?.message === 'Failed to fetch'
+        ? 'The live contact API is not reachable yet, so an email draft was opened instead.'
+        : 'An email draft was opened so you can send this message directly.'
+    );
   };
 
   return (
