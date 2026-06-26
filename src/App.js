@@ -106,7 +106,7 @@ const initialContactForm = {
   subject: '',
   message: ''
 };
-const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || 'https://formsubmit.co/ajax/achintyajaimini@gmail.com';
+const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || '/api/contact';
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
   493.88, 392, 440, 523.25
@@ -302,6 +302,14 @@ function quiescence(game, alpha, beta, maximizingBlack, depth) {
   }
 
   return bestScore;
+}
+
+function parseJson(value) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return {};
+  }
 }
 
 function minimax(game, depth, alpha, beta, maximizingBlack, quiescenceDepth) {
@@ -593,6 +601,7 @@ const App = () => {
   const [chessOpen, setChessOpen] = useState(false);
   const [contactForm, setContactForm] = useState(initialContactForm);
   const [contactStatus, setContactStatus] = useState('');
+  const [contactFormStartedAt, setContactFormStartedAt] = useState(() => Date.now());
   const audioStateRef = useRef(null);
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -630,6 +639,10 @@ const App = () => {
 
   const handleContactSubmit = async (event) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const website = formData.get('website')?.toString() || '';
+    const formStartedAt = formData.get('formStartedAt')?.toString() || '';
 
     if (!contactEndpoint) {
       setContactStatus('Contact form is not configured yet.');
@@ -648,22 +661,31 @@ const App = () => {
         body: JSON.stringify({
           name: contactForm.name,
           email: contactForm.email,
-          _replyto: contactForm.email,
           subject: contactForm.subject,
           message: contactForm.message,
-          _subject: `Portfolio contact: ${contactForm.subject}`,
-          _template: 'table'
+          website,
+          formStartedAt
         })
       });
+      const responseText = await response.text();
+      const result = parseJson(responseText);
 
       if (!response.ok) {
-        throw new Error('Contact form submission failed.');
+        throw new Error(
+          result.error ||
+            `Contact API returned ${response.status}. ${
+              response.status === 404
+                ? 'The API was not found. Run the Node server with npm run serve, or deploy the server endpoint.'
+                : 'Please try again later.'
+            }`
+        );
       }
 
       setContactStatus('Thanks. Your message has been received.');
       setContactForm(initialContactForm);
-    } catch {
-      setContactStatus('Sorry, your message could not be sent. Please try again later.');
+      setContactFormStartedAt(Date.now());
+    } catch (error) {
+      setContactStatus(error?.message || 'Sorry, your message could not be sent. Please try again later.');
     }
   };
 
@@ -903,6 +925,8 @@ city of Davis</p>
                 required
               />
             </label>
+            <input type="text" name="website" tabIndex="-1" autoComplete="off" hidden />
+            <input type="hidden" name="formStartedAt" value={contactFormStartedAt} readOnly />
 
             {contactStatus && <p className="contact-status">{contactStatus}</p>}
 
