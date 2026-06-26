@@ -107,7 +107,7 @@ const initialContactForm = {
   message: ''
 };
 const contactEmail = 'achintyajaimini@gmail.com';
-const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || '/api/contact';
+const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || `https://formsubmit.co/ajax/${contactEmail}`;
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
   493.88, 392, 440, 523.25
@@ -642,8 +642,11 @@ const App = () => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const website = formData.get('website')?.toString() || '';
-    const formStartedAt = formData.get('formStartedAt')?.toString() || '';
+    formData.set('_subject', contactForm.subject || 'Portfolio contact');
+    formData.set('_template', 'table');
+    formData.set('_honey', formData.get('website')?.toString() || '');
+    formData.delete('website');
+    formData.delete('formStartedAt');
 
     if (!contactEndpoint) {
       openMailFallback();
@@ -656,17 +659,9 @@ const App = () => {
       const response = await fetch(contactEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Accept: 'application/json'
         },
-        body: JSON.stringify({
-          name: contactForm.name,
-          email: contactForm.email,
-          subject: contactForm.subject,
-          message: contactForm.message,
-          website,
-          formStartedAt
-        })
+        body: formData
       });
       const responseText = await response.text();
       const result = parseJson(responseText);
@@ -674,9 +669,9 @@ const App = () => {
       if (!response.ok) {
         throw new Error(
           result.error ||
-            `Contact API returned ${response.status}. ${
+            `Contact form returned ${response.status}. ${
               response.status === 404
-                ? 'The API was not found. Run the Node server with npm run serve, or deploy the server endpoint.'
+                ? 'Please check the form service endpoint.'
                 : 'Please try again later.'
             }`
         );
@@ -703,7 +698,7 @@ const App = () => {
     window.location.href = mailtoUrl;
     setContactStatus(
       error?.message === 'Failed to fetch'
-        ? 'The live contact API is not reachable yet, so an email draft was opened instead.'
+        ? 'The contact service is not reachable yet, so an email draft was opened instead.'
         : 'An email draft was opened so you can send this message directly.'
     );
   };
