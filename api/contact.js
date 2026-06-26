@@ -3,8 +3,20 @@ const nodemailer = require("nodemailer");
 const { checkFormGuard, getClientIp } = require("./form-guard.js");
 
 const CONTACT_EMAIL = "achintyajaimini@gmail.com";
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://achintyajaimini.github.io",
+  "http://localhost:3000",
+];
 
 async function handler(req, res) {
+  applyCorsHeaders(req, res);
+
+  if (req.method === "OPTIONS") {
+    res.statusCode = 204;
+    res.end();
+    return;
+  }
+
   if (req.method !== "POST") {
     return sendJson(res, 405, { error: "Method not allowed." });
   }
@@ -201,6 +213,34 @@ function sendJson(res, statusCode, payload) {
   res.statusCode = statusCode;
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
+}
+
+function applyCorsHeaders(req, res) {
+  const origin = req.headers.origin;
+
+  if (!origin) {
+    return;
+  }
+
+  const allowedOrigins = getAllowedOrigins();
+  const allowsAnyOrigin = allowedOrigins.includes("*");
+
+  if (!allowsAnyOrigin && !allowedOrigins.includes(origin)) {
+    return;
+  }
+
+  res.setHeader("Access-Control-Allow-Origin", allowsAnyOrigin ? "*" : origin);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+  res.setHeader("Access-Control-Max-Age", "86400");
+  res.setHeader("Vary", "Origin");
+}
+
+function getAllowedOrigins() {
+  return (process.env.CONTACT_ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(","))
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 }
 
 class PublicError extends Error {

@@ -20,5 +20,7 @@ services:
         value: "Achintya Jaimini <achintyajaimini@gmail.com>"
       - key: CONTACT_TO_EMAIL
         value: achintyajaimini@gmail.com
+      - key: CONTACT_ALLOWED_ORIGINS
+        value: https://achintyajaimini.github.io
       - key: SMTP_PASS
         sync: false
