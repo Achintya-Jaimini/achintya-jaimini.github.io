@@ -12,11 +12,7 @@ const initialContactForm = {
   message: ''
 };
 const renderContactEndpoint = 'https://achintya-portfolio.onrender.com/api/contact';
-const contactEndpoint =
-  process.env.REACT_APP_CONTACT_ENDPOINT ||
-  (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')
-    ? renderContactEndpoint
-    : '/api/contact');
+const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || renderContactEndpoint;
 const melodyPattern = [
   329.63, 392, 493.88, 587.33,
   493.88, 392, 440, 523.25
