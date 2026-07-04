@@ -799,7 +799,7 @@ const App = () => {
         <a href="https://www.linkedin.com/in/achintya-jaimini/details/experience/" target="_blank" rel="noreferrer">
         <div className="timeline">
           <div className="timeline-item">
-            <div className="timeline-date">2025 - Present</div>
+            <div className="timeline-date">2025 - 2026</div>
             <div className="timeline-content">
               <h4>Infrastructure Director</h4>
               <h5>Swift Coding Club @ UC Davis</h5>
