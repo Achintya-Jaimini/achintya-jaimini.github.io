@@ -819,7 +819,7 @@ const App = () => {
             <div className="timeline-content">
               <h4>Resident Assistant</h4>
               <h5>UC Davis</h5>
-              <p>Managing conflict resolution and hosting events for residents in the community.</p>
+              <p>Managing conflict resolution between residents and hosting events for residents in the community.</p>
             </div>
           </div>
           <div className="timeline-item">
