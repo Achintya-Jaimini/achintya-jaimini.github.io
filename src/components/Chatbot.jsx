@@ -41,14 +41,8 @@ const knowledgeBase = [
   {
     topic: "interests",
     title: "Interests",
-    keywords: ["hobby", "interest", "rubik", "chess", "exercise", "teach", "travel", "fun"],
-    text: "Outside the core CS work, he enjoys chess, solving Rubik's Cubes, exercising, teaching mathematics, and exploring new places and ideas."
-  },
-  {
-    topic: "chess",
-    title: "Chess bot",
-    keywords: ["chess", "bot", "game", "play", "timed"],
-    text: "This site also includes a timed React chess bot with multiple difficulty settings, legal move highlighting, move history, and a simple chess engine."
+    keywords: ["hobby", "interest", "rubik", "exercise", "teach", "travel", "fun"],
+    text: "Outside the core CS work, he enjoys solving Rubik's Cubes, exercising, teaching mathematics, and exploring new places and ideas."
   },
   {
     topic: "contact",
@@ -109,7 +103,7 @@ function buildResponse(question, history) {
 
   if (/\b(hi|hello|hey)\b/i.test(question)) {
     return {
-      text: "Hi, I'm Achintya's portfolio assistant. Ask me about his projects, skills, experience, book, chess bot, or background.",
+      text: "Hi, I'm Achintya's portfolio assistant. Ask me about his projects, skills, experience, book, interests, or background.",
       topic: "identity"
     };
   }
@@ -126,7 +120,7 @@ function buildResponse(question, history) {
     }
 
     return {
-      text: "I can answer best when the question is about Achintya's skills, projects, experience, education, book, chess bot, or interests. Try asking, \"What projects has he built?\" or \"What is his strongest technical stack?\"",
+      text: "I can answer best when the question is about Achintya's skills, projects, experience, education, book, or interests. Try asking, \"What projects has he built?\" or \"What is his strongest technical stack?\"",
       topic: "identity"
     };
   }
