@@ -1,21 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { 
-  Terminal, Cpu, Globe, Server, Send
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import './App.css';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Terminal,
+  Cpu,
+  Globe,
+  Server,
+  Send,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import "./App.css";
 import Chatbot from "./components/Chatbot";
 
 const initialContactForm = {
-  name: '',
-  email: '',
-  message: ''
+  name: "",
+  email: "",
+  message: "",
 };
-const contactEmail = 'achintyajaimini@gmail.com';
-const contactEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT || `https://formsubmit.co/ajax/${contactEmail}`;
+
 const melodyPattern = [
-  329.63, 392, 493.88, 587.33,
-  493.88, 392, 440, 523.25
+  329.63,
+  392,
+  493.88,
+  587.33,
+  493.88,
+  392,
+  440,
+  523.25,
 ];
 
 function startAmbientMusic(audioStateRef) {
@@ -28,27 +37,36 @@ function startAmbientMusic(audioStateRef) {
   if (!AudioContext) return;
 
   const context = new AudioContext();
+
   const masterGain = context.createGain();
   masterGain.gain.setValueAtTime(0.045, context.currentTime);
   masterGain.connect(context.destination);
 
   const delay = context.createDelay();
   const delayGain = context.createGain();
+
   delay.delayTime.setValueAtTime(0.18, context.currentTime);
   delayGain.gain.setValueAtTime(0.18, context.currentTime);
+
   delay.connect(delayGain);
   delayGain.connect(masterGain);
 
   let noteIndex = 0;
+
   const playNote = () => {
     const now = context.currentTime;
     const frequency = melodyPattern[noteIndex % melodyPattern.length];
+
     const oscillator = context.createOscillator();
     const voiceGain = context.createGain();
 
-    oscillator.type = 'triangle';
+    oscillator.type = "triangle";
     oscillator.frequency.setValueAtTime(frequency, now);
-    oscillator.frequency.exponentialRampToValueAtTime(frequency * 1.006, now + 0.16);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      frequency * 1.006,
+      now + 0.16
+    );
+
     voiceGain.gain.setValueAtTime(0.0001, now);
     voiceGain.gain.exponentialRampToValueAtTime(0.28, now + 0.015);
     voiceGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
@@ -56,20 +74,26 @@ function startAmbientMusic(audioStateRef) {
     oscillator.connect(voiceGain);
     voiceGain.connect(masterGain);
     voiceGain.connect(delay);
+
     oscillator.start(now);
     oscillator.stop(now + 0.34);
-    noteIndex += 1;
+
+    noteIndex++;
   };
 
   playNote();
+
   const intervalId = window.setInterval(playNote, 360);
 
   const lfo = context.createOscillator();
   const lfoGain = context.createGain();
+
   lfo.frequency.setValueAtTime(0.16, context.currentTime);
   lfoGain.gain.setValueAtTime(0.006, context.currentTime);
+
   lfo.connect(lfoGain);
   lfoGain.connect(masterGain.gain);
+
   lfo.start();
 
   audioStateRef.current = {
@@ -78,31 +102,24 @@ function startAmbientMusic(audioStateRef) {
       window.clearInterval(intervalId);
       lfo.stop();
       context.close();
-    }
+    },
   };
 
   context.resume().catch(() => {});
 }
 
-function parseJson(value) {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return {};
-  }
-}
-
 const App = () => {
   const [contactForm, setContactForm] = useState(initialContactForm);
-  const [contactStatus, setContactStatus] = useState('');
+  const [contactStatus, setContactStatus] = useState("");
   const [contactFormStartedAt, setContactFormStartedAt] = useState(() => Date.now());
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const audioStateRef = useRef(null);
+
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
-    transition: { duration: 0.6 }
+    transition: { duration: 0.6 },
   };
 
   useEffect(() => {
@@ -110,15 +127,20 @@ const App = () => {
 
     beginMusic();
 
-    const interactionEvents = ['click', 'keydown', 'touchstart', 'scroll'];
+    const interactionEvents = ["click", "keydown", "touchstart", "scroll"];
+
     interactionEvents.forEach((eventName) => {
-      window.addEventListener(eventName, beginMusic, { once: true, passive: true });
+      window.addEventListener(eventName, beginMusic, {
+        once: true,
+        passive: true,
+      });
     });
 
     return () => {
       interactionEvents.forEach((eventName) => {
         window.removeEventListener(eventName, beginMusic);
       });
+
       audioStateRef.current?.stop();
       audioStateRef.current = null;
     };
@@ -126,68 +148,72 @@ const App = () => {
 
   const handleContactChange = (event) => {
     const { name, value } = event.target;
+
     setContactForm((currentForm) => ({
       ...currentForm,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleContactSubmit = async (event) => {
     event.preventDefault();
+
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const name = formData.get('name')?.toString().trim();
-    const email = formData.get('email')?.toString().trim();
-    const message = formData.get('message')?.toString().trim();
-    const website = formData.get('website')?.toString() || '';
-    const formStartedAt = formData.get('formStartedAt')?.toString() || '';
+
+    const name = formData.get("name")?.toString().trim();
+    const email = formData.get("email")?.toString().trim();
+    const message = formData.get("message")?.toString().trim();
+    const website = formData.get("website")?.toString() || "";
+    const formStartedAt = formData.get("formStartedAt")?.toString() || "";
 
     if (!name || !email || !message) {
-      setContactStatus('Please complete every field before sending.');
+      setContactStatus("Please complete every field before sending.");
       return;
     }
 
+    // Honeypot + time-based spam protection
     if (website || Date.now() - Number(formStartedAt) < 1200) {
-      setContactStatus('Thanks. Your message has been received.');
+      setContactStatus("Thanks. Your message has been received.");
       setContactForm(initialContactForm);
       setContactFormStartedAt(Date.now());
       return;
     }
 
     setIsContactSubmitting(true);
-    setContactStatus('');
-    formData.set('_subject', 'Portfolio contact');
-    formData.set('_template', 'table');
-    formData.set('_honey', website);
-    formData.delete('website');
-    formData.delete('formStartedAt');
+    setContactStatus("");
 
     try {
-      const response = await fetch(contactEndpoint, {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          Accept: 'application/json'
+          "Content-Type": "application/json",
         },
-        body: formData
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          website,
+          formStartedAt,
+        }),
       });
-      const responseText = await response.text();
-      const result = parseJson(responseText);
+
+      const text = await response.text();
+      console.log(text);
 
       if (!response.ok) {
-        throw new Error(
-          result.error ||
-            `Contact form returned ${response.status}. ${
-              response.status === 404 ? 'Please check the form service endpoint.' : 'Please try again later.'
-            }`
-        );
+        throw new Error(text || "Failed to send message.");
       }
 
-      setContactStatus('Thanks. Your message has been received.');
+      setContactStatus("Thanks. Your message has been received.");
       setContactForm(initialContactForm);
       setContactFormStartedAt(Date.now());
     } catch (error) {
-      console.error('Contact form error:', error);
-      setContactStatus(error?.message || 'Sorry, your message could not be sent. Please try again.');
+      console.error("Contact form error:", error);
+      setContactStatus(
+        error?.message ||
+          "Sorry, your message could not be sent. Please try again."
+      );
     } finally {
       setIsContactSubmitting(false);
     }
@@ -348,9 +374,7 @@ const App = () => {
           <a href='https://github.com/Swift-Coding-Club-UCD/DavisFriends' target="_blank" rel="noreferrer">
             <div className="project-glass-card">
               <h4>Davis Friends</h4>
-              <p>developed an app to unify all the events happening in the
-recovery challenges and procedure of
-city of Davis</p>
+              <p>developed an app to unify all the events happening in the city of Davis</p>
               <div className="tags"><span>Swift</span><span>iOS</span></div>
             </div>
           </a>

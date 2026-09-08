@@ -8,7 +8,7 @@ loadLocalEnv();
 const contactHandler = require("./api/contact.js");
 
 const buildDir = path.join(__dirname, "build");
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 3001;
 
 const apiRoutes = [
   ["/api/contact", contactHandler],
