@@ -289,7 +289,7 @@ const App = () => {
           <div className="skill-card">
             <Cpu className="skill-icon" />
             <h4>Frameworks</h4>
-            <p>TensorFlow, NumPy, React.js, Flask, Django</p>
+            <p>TensorFlow, NumPy, React.js, Flask, Django, PyTorch</p>
           </div>
         </div>
       </section>
@@ -310,6 +310,15 @@ const App = () => {
         <h2 className="section-title">Experience</h2>
         <a href="https://www.linkedin.com/in/achintya-jaimini/details/experience/" target="_blank" rel="noreferrer">
         <div className="timeline">
+          <div className="timeline-item">
+            <div className="timeline-date">2026 - 2026</div>
+            <div className="timeline-content">
+              <h4>Developer</h4>
+              <h5>Machine Learning Student Network @ UC Davis</h5>
+              <p>Develop a machine learning and deep learning model to predict CRISPR-Cas9 gene-editing efficiency from DNA and guide
+RNA sequences </p>
+            </div>
+          </div>
           <div className="timeline-item">
             <div className="timeline-date">2025 - 2026</div>
             <div className="timeline-content">
@@ -357,6 +366,13 @@ const App = () => {
       <section id="projects" className="section-padding">
         <h2 className="section-title">Featured Projects</h2>
         <div className="projects-container">
+          <a href='https://mlsn-f26-group2-presentation.onrender.com/' target="_blank" rel="noreferrer">
+            <div className="project-glass-card">
+              <h4>CRISPR-Cas9 Gene Editing</h4>
+              <p>Built ML models to predict CRISPR-Cas9 gene-editing efficiency and off-target effects using DNA and RNA sequences.</p>
+              <div className="tags"><span>Python</span><span>ML</span><span>PyTorch</span></div>
+            </div>
+          </a>
           <a href='https://github.com/Achintya-Jaimini/Team-Nexus/blob/main/Intelli.py' target="_blank" rel="noreferrer">
             <div className="project-glass-card">
               <h4>Voice-Enabled Assistant</h4>
@@ -387,7 +403,7 @@ const App = () => {
           </a>
           <a href='https://drive.google.com/file/d/1gJ1dHswbzEsnNjHOQ_Aq0BoaRaH7xK0e/view?usp=sharing' target="_blank" rel="noreferrer">
             <div className="project-glass-card">
-              <h4>Neurotech EEG Analysis</h4>
+              <h4>Neuromarketing</h4>
               <p>Collaborated on ML models using TensorFlow to study consumer behavior via EEG data.</p>
               <div className="tags"><span>Python</span><span>TensorFlow</span></div>
             </div>
