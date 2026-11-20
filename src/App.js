@@ -45,7 +45,7 @@ const App = () => {
     const interactionEvents = ["click", "keydown", "touchstart", "scroll"];
 
     interactionEvents.forEach((eventName) => {
-      window.addEventListener(eventName, beginMusic, {
+      window.addEventListener(eventName, {
         once: true,
         passive: true,
       });
@@ -53,7 +53,7 @@ const App = () => {
 
     return () => {
       interactionEvents.forEach((eventName) => {
-        window.removeEventListener(eventName, beginMusic);
+        window.removeEventListener(eventName,);
       });
 
       audioStateRef.current?.stop();
