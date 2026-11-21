@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   Terminal,
@@ -16,18 +17,8 @@ const initialContactForm = {
   message: "",
 };
 
-const melodyPattern = [
-  329.63,
-  392,
-  493.88,
-  587.33,
-  493.88,
-  392,
-  440,
-  523.25,
-];
-
 const App = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [contactForm, setContactForm] = useState(initialContactForm);
   const [contactStatus, setContactStatus] = useState("");
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
@@ -40,22 +31,9 @@ const App = () => {
     transition: { duration: 0.6 },
   };
 
+  // Clean up audio when the component unmounts.
   useEffect(() => {
-
-    const interactionEvents = ["click", "keydown", "touchstart", "scroll"];
-
-    interactionEvents.forEach((eventName) => {
-      window.addEventListener(eventName, {
-        once: true,
-        passive: true,
-      });
-    });
-
     return () => {
-      interactionEvents.forEach((eventName) => {
-        window.removeEventListener(eventName,);
-      });
-
       audioStateRef.current?.stop();
       audioStateRef.current = null;
     };
@@ -128,14 +106,30 @@ const App = () => {
 
   return (
     <div className="portfolio">
+
       {/* NAVIGATION */}
       <nav className="navbar">
         <div className="nav-logo">AJ</div>
-        <div className="nav-links">
-          <a href="#skills">Skills</a>
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
+
+        <button
+          className="nav-toggle"
+          type="button"
+          onClick={() => setMenuOpen((isOpen) => !isOpen)}
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+        >
+          {menuOpen ? "×" : "☰"}
+        </button>
+
+        <div
+          id="primary-navigation"
+          className={`nav-links ${menuOpen ? "is-open" : ""}`}
+        >
+          <a href="#skills" onClick={() => setMenuOpen(false)}>Skills</a>
+          <a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a>
+          <a href="#projects" onClick={() => setMenuOpen(false)}>Projects</a>
+          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
         </div>
       </nav>
 
@@ -144,7 +138,10 @@ const App = () => {
         <motion.div {...fadeIn}>
           <h1>I'm Achintya Jaimini</h1>
 
-          <span className="badge">Computer Science @ UC Davis</span>
+          <span className="badge">
+            Computer Science @ UC Davis
+          </span>
+
           <br />
           <br />
 
@@ -155,6 +152,7 @@ const App = () => {
 
           <div className="social-links">
             <br />
+
             <a
               href="https://www.linkedin.com/in/achintya-jaimini/"
               target="_blank"
@@ -181,6 +179,7 @@ const App = () => {
             <motion.div className="book-card" {...fadeIn}>
               <div className="book-content">
                 <h3>Published Author: "Master The Stroke"</h3>
+
                 <p>
                   Detailed my personal recovery from a brain stroke and hemiparesis.
                   This journey of resilience defines my strengths in overcoming challenges.
@@ -234,6 +233,7 @@ const App = () => {
           rel="noreferrer"
         >
           <div className="timeline">
+
             <div className="timeline-item">
               <div className="timeline-date">2026 - 2026</div>
               <div className="timeline-content">
@@ -305,6 +305,7 @@ const App = () => {
                 </p>
               </div>
             </div>
+
           </div>
         </a>
       </section>
@@ -314,6 +315,7 @@ const App = () => {
         <h2 className="section-title">Featured Projects</h2>
 
         <div className="projects-container">
+
           <a
             href="https://mlsn-f26-group2-presentation.onrender.com/"
             target="_blank"
@@ -326,7 +328,9 @@ const App = () => {
                 off-target effects using DNA and RNA sequences.
               </p>
               <div className="tags">
-                <span>Python</span><span>ML</span><span>PyTorch</span>
+                <span>Python</span>
+                <span>ML</span>
+                <span>PyTorch</span>
               </div>
             </div>
           </a>
@@ -343,7 +347,8 @@ const App = () => {
                 voice handling.
               </p>
               <div className="tags">
-                <span>Python</span><span>Speech Recognition</span>
+                <span>Python</span>
+                <span>Speech Recognition</span>
               </div>
             </div>
           </a>
@@ -360,7 +365,8 @@ const App = () => {
                 session handling,
               </p>
               <div className="tags">
-                <span>Python</span><span>Flask</span>
+                <span>Python</span>
+                <span>Flask</span>
               </div>
             </div>
           </a>
@@ -372,9 +378,12 @@ const App = () => {
           >
             <div className="project-glass-card">
               <h4>Davis Friends</h4>
-              <p>developed an app to unify all the events happening in the city of Davis</p>
+              <p>
+                developed an app to unify all the events happening in the city of Davis
+              </p>
               <div className="tags">
-                <span>Swift</span><span>iOS</span>
+                <span>Swift</span>
+                <span>iOS</span>
               </div>
             </div>
           </a>
@@ -386,9 +395,12 @@ const App = () => {
           >
             <div className="project-glass-card">
               <h4>Flare/Glare Removal</h4>
-              <p>Developed a Python program to remove flare and glare effects from images.</p>
+              <p>
+                Developed a Python program to remove flare and glare effects from images.
+              </p>
               <div className="tags">
-                <span>Python</span><span>Image Processing</span>
+                <span>Python</span>
+                <span>Image Processing</span>
               </div>
             </div>
           </a>
@@ -405,16 +417,19 @@ const App = () => {
                 via EEG data.
               </p>
               <div className="tags">
-                <span>Python</span><span>TensorFlow</span>
+                <span>Python</span>
+                <span>TensorFlow</span>
               </div>
             </div>
           </a>
+
         </div>
       </section>
 
       {/* CONTACT SECTION */}
       <section id="contact" className="section-padding contact-section">
         <motion.div className="contact-shell" {...fadeIn}>
+
           <div className="contact-copy">
             <h2 className="section-title">Contact</h2>
             <p>
@@ -423,6 +438,7 @@ const App = () => {
           </div>
 
           <form className="contact-form" onSubmit={handleContactSubmit}>
+
             <input
               type="hidden"
               name="_subject"
@@ -484,15 +500,19 @@ const App = () => {
                 {isContactSubmitting ? "Sending..." : "Submit"}
               </button>
             </div>
+
           </form>
         </motion.div>
       </section>
 
+      {/* CHATBOT */}
       <Chatbot />
 
+      {/* FOOTER */}
       <footer className="footer">
         <p>© 2026 Achintya Jaimini</p>
       </footer>
+
     </div>
   );
 };
