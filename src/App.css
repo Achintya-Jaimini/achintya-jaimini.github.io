@@ -439,3 +439,13 @@ a {
     border-bottom: none;
   }
 }
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 10%;
+  padding-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
