@@ -175,16 +175,19 @@ const App = () => {
               aria-label="FIDE Chess Profile"
               title="FIDE Chess Profile"
             >
+            
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               fill="#0077B5"
             >
-              <circle cx="12" cy="5" r="3.5" />
-              <path d="M9.5 9h5l1 6 2.5 3H6l2.5-3 1-6z" />
-              <path d="M5 18h14v2H5z" />
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5z" />
+              <path
+              fill="#020817"
+                d="M12 3.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM9.5 10.5h5l.8 5 2.2 3H6.5l2.2-3 .8-5zM5 19h14v1.5H5z"
+              />
             </svg>
             </a>
           </div>
